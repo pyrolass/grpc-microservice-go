@@ -3,11 +3,14 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"time"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	types "github.com/pyrolass/grpc-microservice-go/proto"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/connectivity"
 )
 
 type KafkaConsumer struct {
@@ -52,6 +55,16 @@ func (c *KafkaConsumer) readMessageLoop() {
 	var messagesBatch []*types.InsertDriverLogRequest
 
 	for c.isRunning {
+
+		fmt.Println(c.conn.GetState())
+
+		if c.conn.GetState() != connectivity.Ready {
+			logrus.Warn("gRPC connection not ready, waiting before consuming messages")
+			time.Sleep(5 * time.Second) // Wait for 5 seconds before checking again
+			c.conn.Connect()            // Try to connect again
+			continue                    // Skip this iteration and check the connection again
+		}
+
 		msg, err := c.consumer.ReadMessage(-1)
 
 		if err != nil {
@@ -70,7 +83,7 @@ func (c *KafkaConsumer) readMessageLoop() {
 
 		messagesBatch = append(messagesBatch, &driverData)
 
-		if len(messagesBatch) == 5 {
+		if len(messagesBatch) >= 5 {
 
 			batchRequest := &types.InsertLogListRequest{Logs: messagesBatch}
 
