@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/pyrolass/grpc-microservice-go/gateway/common"
+	"github.com/pyrolass/grpc-microservice-go/gateway/middleware"
 )
 
 var config = fiber.Config{
@@ -28,7 +29,7 @@ var config = fiber.Config{
 func main() {
 	app := fiber.New(config)
 
-	router := app.Group("api/v1")
+	router := app.Group("api/v1", middleware.LogRequest)
 
 	router.Get(
 		"/ping",
