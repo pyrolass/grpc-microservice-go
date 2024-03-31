@@ -4,7 +4,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/pyrolass/grpc-microservice-go/gateway/entities"
 	types "github.com/pyrolass/grpc-microservice-go/proto"
-	"google.golang.org/grpc"
 )
 
 type DriverHandlerInterface interface {
@@ -12,10 +11,13 @@ type DriverHandlerInterface interface {
 }
 
 type DriverHandler struct {
+	gClient types.DriverServiceClient
 }
 
-func NewDriverHandler() DriverHandlerInterface {
-	return &DriverHandler{}
+func NewDriverHandler(gClient types.DriverServiceClient) DriverHandlerInterface {
+	return &DriverHandler{
+		gClient: gClient,
+	}
 }
 
 func (d *DriverHandler) InsertDriverLog(c *fiber.Ctx) error {
@@ -24,17 +26,7 @@ func (d *DriverHandler) InsertDriverLog(c *fiber.Ctx) error {
 		return err
 	}
 
-	conn, err := grpc.Dial("localhost:3001", grpc.WithInsecure())
-
-	if err != nil {
-		panic(err)
-	}
-
-	defer conn.Close()
-
-	gClient := types.NewDriverServiceClient(conn)
-
-	_, err = gClient.InsertDriverLog(c.Context(), &types.InsertDriverLogRequest{
+	_, err := d.gClient.InsertDriverLog(c.Context(), &types.InsertDriverLogRequest{
 		DriverId: int32(driver.DriverId),
 		Lat:      driver.Lat,
 		Lon:      driver.Lon,

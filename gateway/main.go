@@ -7,6 +7,8 @@ import (
 	"github.com/pyrolass/grpc-microservice-go/gateway/common"
 	"github.com/pyrolass/grpc-microservice-go/gateway/middleware"
 	"github.com/pyrolass/grpc-microservice-go/gateway/routes"
+	types "github.com/pyrolass/grpc-microservice-go/proto"
+	"google.golang.org/grpc"
 )
 
 var config = fiber.Config{
@@ -43,7 +45,18 @@ func main() {
 		},
 	)
 
-	routes.DriverRoutes(router)
+	// driver routes grpc
+	conn, err := grpc.Dial("localhost:3001", grpc.WithInsecure())
+
+	if err != nil {
+		panic(err)
+	}
+
+	defer conn.Close()
+
+	gClient := types.NewDriverServiceClient(conn)
+
+	routes.DriverRoutes(router, gClient)
 
 	log.Fatal(app.Listen(":3000"))
 }
