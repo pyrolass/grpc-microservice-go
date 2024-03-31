@@ -8,6 +8,10 @@ service DriverMessageService{
     rpc InsertDriverLog(InsertDriverLogRequest) returns (InsertDriverLogResponse);
 }
 
+service DriverWriteService{
+    rpc InsertDriverLogDB(InsertLogListRequest) returns (InsertDriverLogResponse);
+}
+
 
 message None{}
 
@@ -16,6 +20,10 @@ message InsertDriverLogRequest{
     int32 DriverId = 1;
     double Lat = 2;
     double Lon = 3;
+}
+
+message InsertLogListRequest{
+    repeated InsertDriverLogRequest logs = 1;
 }
 
 message InsertDriverLogResponse {

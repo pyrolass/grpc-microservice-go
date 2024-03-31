@@ -38,7 +38,7 @@ func makeGRPCTransport(listenAddr string) error {
 
 	driverHandler := handlers.NewWriteGRPCDriverHandler()
 
-	types.RegisterDriverMessageServiceServer(grpcServer, driverHandler)
+	types.RegisterDriverWriteServiceServer(grpcServer, driverHandler)
 
 	return grpcServer.Serve(ln)
 

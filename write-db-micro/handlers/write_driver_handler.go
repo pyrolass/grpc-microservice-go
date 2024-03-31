@@ -9,14 +9,14 @@ import (
 )
 
 type WriteGRPCDriverHandler struct {
-	types.UnimplementedDriverMessageServiceServer
+	types.UnimplementedDriverWriteServiceServer
 }
 
 func NewWriteGRPCDriverHandler() *WriteGRPCDriverHandler {
 	return &WriteGRPCDriverHandler{}
 }
 
-func (d *WriteGRPCDriverHandler) InsertDriverLog(ctx context.Context, req *types.InsertDriverLogRequest) (*types.InsertDriverLogResponse, error) {
+func (d *WriteGRPCDriverHandler) InsertDriverLogDB(ctx context.Context, req *types.InsertLogListRequest) (*types.InsertDriverLogResponse, error) {
 	logrus.Infof("InsertDriverLog called with %v", req)
 
 	return &types.InsertDriverLogResponse{

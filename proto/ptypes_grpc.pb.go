@@ -107,3 +107,93 @@ var DriverMessageService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/ptypes.proto",
 }
+
+const (
+	DriverWriteService_InsertDriverLogDB_FullMethodName = "/DriverWriteService/InsertDriverLogDB"
+)
+
+// DriverWriteServiceClient is the client API for DriverWriteService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type DriverWriteServiceClient interface {
+	InsertDriverLogDB(ctx context.Context, in *InsertLogListRequest, opts ...grpc.CallOption) (*InsertDriverLogResponse, error)
+}
+
+type driverWriteServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewDriverWriteServiceClient(cc grpc.ClientConnInterface) DriverWriteServiceClient {
+	return &driverWriteServiceClient{cc}
+}
+
+func (c *driverWriteServiceClient) InsertDriverLogDB(ctx context.Context, in *InsertLogListRequest, opts ...grpc.CallOption) (*InsertDriverLogResponse, error) {
+	out := new(InsertDriverLogResponse)
+	err := c.cc.Invoke(ctx, DriverWriteService_InsertDriverLogDB_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// DriverWriteServiceServer is the server API for DriverWriteService service.
+// All implementations must embed UnimplementedDriverWriteServiceServer
+// for forward compatibility
+type DriverWriteServiceServer interface {
+	InsertDriverLogDB(context.Context, *InsertLogListRequest) (*InsertDriverLogResponse, error)
+	mustEmbedUnimplementedDriverWriteServiceServer()
+}
+
+// UnimplementedDriverWriteServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedDriverWriteServiceServer struct {
+}
+
+func (UnimplementedDriverWriteServiceServer) InsertDriverLogDB(context.Context, *InsertLogListRequest) (*InsertDriverLogResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InsertDriverLogDB not implemented")
+}
+func (UnimplementedDriverWriteServiceServer) mustEmbedUnimplementedDriverWriteServiceServer() {}
+
+// UnsafeDriverWriteServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to DriverWriteServiceServer will
+// result in compilation errors.
+type UnsafeDriverWriteServiceServer interface {
+	mustEmbedUnimplementedDriverWriteServiceServer()
+}
+
+func RegisterDriverWriteServiceServer(s grpc.ServiceRegistrar, srv DriverWriteServiceServer) {
+	s.RegisterService(&DriverWriteService_ServiceDesc, srv)
+}
+
+func _DriverWriteService_InsertDriverLogDB_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InsertLogListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DriverWriteServiceServer).InsertDriverLogDB(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DriverWriteService_InsertDriverLogDB_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DriverWriteServiceServer).InsertDriverLogDB(ctx, req.(*InsertLogListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// DriverWriteService_ServiceDesc is the grpc.ServiceDesc for DriverWriteService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var DriverWriteService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "DriverWriteService",
+	HandlerType: (*DriverWriteServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "InsertDriverLogDB",
+			Handler:    _DriverWriteService_InsertDriverLogDB_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/ptypes.proto",
+}

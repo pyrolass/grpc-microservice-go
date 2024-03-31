@@ -1,16 +1,19 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	types "github.com/pyrolass/grpc-microservice-go/proto"
 	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 )
 
 type KafkaConsumer struct {
 	consumer  *kafka.Consumer
 	isRunning bool
+	conn      *grpc.ClientConn
 }
 
 func NewKafkaConsumer(topic string) (*KafkaConsumer, error) {
@@ -26,7 +29,15 @@ func NewKafkaConsumer(topic string) (*KafkaConsumer, error) {
 		return nil, err
 	}
 
-	return &KafkaConsumer{consumer: c}, nil
+	conn, err := grpc.Dial("localhost:3003", grpc.WithInsecure())
+
+	if err != nil {
+		panic(err)
+	}
+
+	defer conn.Close()
+
+	return &KafkaConsumer{consumer: c, conn: conn}, nil
 }
 
 func (c *KafkaConsumer) Start() {
@@ -37,6 +48,8 @@ func (c *KafkaConsumer) Start() {
 }
 
 func (c *KafkaConsumer) readMessageLoop() {
+
+	var messagesBatch []*types.InsertDriverLogRequest
 
 	for c.isRunning {
 		msg, err := c.consumer.ReadMessage(-1)
@@ -55,7 +68,31 @@ func (c *KafkaConsumer) readMessageLoop() {
 			continue
 		}
 
+		messagesBatch = append(messagesBatch, &driverData)
+
+		if len(messagesBatch) == 1 {
+
+			batchRequest := &types.InsertLogListRequest{Logs: messagesBatch}
+
+			c.writeDataToDB(batchRequest)
+
+			messagesBatch = []*types.InsertDriverLogRequest{}
+		}
+
 		logrus.Infof("Received driver data: %v", &driverData)
 
 	}
+
+}
+
+func (c *KafkaConsumer) writeDataToDB(data *types.InsertLogListRequest) {
+	client := types.NewDriverWriteServiceClient(c.conn)
+
+	resp, err := client.InsertDriverLogDB(context.Background(), data)
+
+	if err != nil {
+		logrus.Errorf("Error writing to db: %v", err)
+	}
+
+	logrus.Infof("Response from db: %v", resp)
 }
