@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	DriverService_InsertDriver_FullMethodName = "/DriverService/InsertDriver"
+	DriverService_InsertDriverLog_FullMethodName = "/DriverService/InsertDriverLog"
 )
 
 // DriverServiceClient is the client API for DriverService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DriverServiceClient interface {
-	InsertDriver(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*InsertDriverLogRequest, error)
+	InsertDriverLog(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*None, error)
 }
 
 type driverServiceClient struct {
@@ -37,9 +37,9 @@ func NewDriverServiceClient(cc grpc.ClientConnInterface) DriverServiceClient {
 	return &driverServiceClient{cc}
 }
 
-func (c *driverServiceClient) InsertDriver(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*InsertDriverLogRequest, error) {
-	out := new(InsertDriverLogRequest)
-	err := c.cc.Invoke(ctx, DriverService_InsertDriver_FullMethodName, in, out, opts...)
+func (c *driverServiceClient) InsertDriverLog(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*None, error) {
+	out := new(None)
+	err := c.cc.Invoke(ctx, DriverService_InsertDriverLog_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (c *driverServiceClient) InsertDriver(ctx context.Context, in *InsertDriver
 // All implementations must embed UnimplementedDriverServiceServer
 // for forward compatibility
 type DriverServiceServer interface {
-	InsertDriver(context.Context, *InsertDriverLogRequest) (*InsertDriverLogRequest, error)
+	InsertDriverLog(context.Context, *InsertDriverLogRequest) (*None, error)
 	mustEmbedUnimplementedDriverServiceServer()
 }
 
@@ -58,8 +58,8 @@ type DriverServiceServer interface {
 type UnimplementedDriverServiceServer struct {
 }
 
-func (UnimplementedDriverServiceServer) InsertDriver(context.Context, *InsertDriverLogRequest) (*InsertDriverLogRequest, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InsertDriver not implemented")
+func (UnimplementedDriverServiceServer) InsertDriverLog(context.Context, *InsertDriverLogRequest) (*None, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InsertDriverLog not implemented")
 }
 func (UnimplementedDriverServiceServer) mustEmbedUnimplementedDriverServiceServer() {}
 
@@ -74,20 +74,20 @@ func RegisterDriverServiceServer(s grpc.ServiceRegistrar, srv DriverServiceServe
 	s.RegisterService(&DriverService_ServiceDesc, srv)
 }
 
-func _DriverService_InsertDriver_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DriverService_InsertDriverLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InsertDriverLogRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DriverServiceServer).InsertDriver(ctx, in)
+		return srv.(DriverServiceServer).InsertDriverLog(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: DriverService_InsertDriver_FullMethodName,
+		FullMethod: DriverService_InsertDriverLog_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DriverServiceServer).InsertDriver(ctx, req.(*InsertDriverLogRequest))
+		return srv.(DriverServiceServer).InsertDriverLog(ctx, req.(*InsertDriverLogRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -100,8 +100,8 @@ var DriverService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DriverServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "InsertDriver",
-			Handler:    _DriverService_InsertDriver_Handler,
+			MethodName: "InsertDriverLog",
+			Handler:    _DriverService_InsertDriverLog_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
