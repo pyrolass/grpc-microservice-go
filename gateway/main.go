@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/pyrolass/grpc-microservice-go/gateway/common"
 	"github.com/pyrolass/grpc-microservice-go/gateway/middleware"
+	"github.com/pyrolass/grpc-microservice-go/gateway/routes"
 )
 
 var config = fiber.Config{
@@ -41,6 +42,8 @@ func main() {
 			)
 		},
 	)
+
+	routes.DriverRoutes(router)
 
 	log.Fatal(app.Listen(":3000"))
 }

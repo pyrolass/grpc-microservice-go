@@ -5,7 +5,7 @@ import (
 	"github.com/pyrolass/grpc-microservice-go/gateway/handlers"
 )
 
-func HotelRoutes(router fiber.Router) {
+func DriverRoutes(router fiber.Router) {
 
 	driverHandle := handlers.NewDriverHandler()
 	router.Post("/drivers", driverHandle.InsertDriverLog)
