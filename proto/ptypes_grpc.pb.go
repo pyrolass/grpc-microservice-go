@@ -26,7 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DriverServiceClient interface {
-	InsertDriverLog(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*None, error)
+	InsertDriverLog(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*InsertDriverLogResponse, error)
 }
 
 type driverServiceClient struct {
@@ -37,8 +37,8 @@ func NewDriverServiceClient(cc grpc.ClientConnInterface) DriverServiceClient {
 	return &driverServiceClient{cc}
 }
 
-func (c *driverServiceClient) InsertDriverLog(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*None, error) {
-	out := new(None)
+func (c *driverServiceClient) InsertDriverLog(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*InsertDriverLogResponse, error) {
+	out := new(InsertDriverLogResponse)
 	err := c.cc.Invoke(ctx, DriverService_InsertDriverLog_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (c *driverServiceClient) InsertDriverLog(ctx context.Context, in *InsertDri
 // All implementations must embed UnimplementedDriverServiceServer
 // for forward compatibility
 type DriverServiceServer interface {
-	InsertDriverLog(context.Context, *InsertDriverLogRequest) (*None, error)
+	InsertDriverLog(context.Context, *InsertDriverLogRequest) (*InsertDriverLogResponse, error)
 	mustEmbedUnimplementedDriverServiceServer()
 }
 
@@ -58,7 +58,7 @@ type DriverServiceServer interface {
 type UnimplementedDriverServiceServer struct {
 }
 
-func (UnimplementedDriverServiceServer) InsertDriverLog(context.Context, *InsertDriverLogRequest) (*None, error) {
+func (UnimplementedDriverServiceServer) InsertDriverLog(context.Context, *InsertDriverLogRequest) (*InsertDriverLogResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InsertDriverLog not implemented")
 }
 func (UnimplementedDriverServiceServer) mustEmbedUnimplementedDriverServiceServer() {}

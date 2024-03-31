@@ -26,7 +26,7 @@ func (d *DriverHandler) InsertDriverLog(c *fiber.Ctx) error {
 		return err
 	}
 
-	_, err := d.gClient.InsertDriverLog(c.Context(), &types.InsertDriverLogRequest{
+	res, err := d.gClient.InsertDriverLog(c.Context(), &types.InsertDriverLogRequest{
 		DriverId: int32(driver.DriverId),
 		Lat:      driver.Lat,
 		Lon:      driver.Lon,
@@ -34,6 +34,12 @@ func (d *DriverHandler) InsertDriverLog(c *fiber.Ctx) error {
 
 	if err != nil {
 		return err
+	}
+
+	if !res.Success {
+		return c.Status(500).JSON(map[string]string{
+			"msg": "failed to insert driver log",
+		})
 	}
 
 	return c.JSON(map[string]string{

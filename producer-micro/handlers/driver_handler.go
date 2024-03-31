@@ -15,7 +15,9 @@ func NewGRPCDriverHandler() *GRPCDriverHandler {
 	return &GRPCDriverHandler{}
 }
 
-func (d *GRPCDriverHandler) InsertDriverLog(ctx context.Context, req *types.InsertDriverLogRequest) (*types.None, error) {
+func (d *GRPCDriverHandler) InsertDriverLog(ctx context.Context, req *types.InsertDriverLogRequest) (*types.InsertDriverLogResponse, error) {
 	logrus.Infof("InsertDriverLog called with %v", req)
-	return nil, nil
+	return &types.InsertDriverLogResponse{
+		Success: true,
+	}, nil
 }
