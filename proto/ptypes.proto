@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "github.com/pyrolass/grpc-microservice-go/tolling/types";
+
+
+
+service DriverService{
+    rpc InsertDriver(InsertDriverLogRequest) returns (InsertDriverLogRequest);
+}
+
+message None{}
+
+
+message InsertDriverLogRequest{
+    int32 DriverId = 1;
+    double Lat = 2;
+    double Lon = 3;
+}
