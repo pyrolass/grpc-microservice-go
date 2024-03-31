@@ -19,89 +19,89 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	DriverService_InsertDriverLog_FullMethodName = "/DriverService/InsertDriverLog"
+	DriverMessageService_InsertDriverLog_FullMethodName = "/DriverMessageService/InsertDriverLog"
 )
 
-// DriverServiceClient is the client API for DriverService service.
+// DriverMessageServiceClient is the client API for DriverMessageService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type DriverServiceClient interface {
+type DriverMessageServiceClient interface {
 	InsertDriverLog(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*InsertDriverLogResponse, error)
 }
 
-type driverServiceClient struct {
+type driverMessageServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewDriverServiceClient(cc grpc.ClientConnInterface) DriverServiceClient {
-	return &driverServiceClient{cc}
+func NewDriverMessageServiceClient(cc grpc.ClientConnInterface) DriverMessageServiceClient {
+	return &driverMessageServiceClient{cc}
 }
 
-func (c *driverServiceClient) InsertDriverLog(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*InsertDriverLogResponse, error) {
+func (c *driverMessageServiceClient) InsertDriverLog(ctx context.Context, in *InsertDriverLogRequest, opts ...grpc.CallOption) (*InsertDriverLogResponse, error) {
 	out := new(InsertDriverLogResponse)
-	err := c.cc.Invoke(ctx, DriverService_InsertDriverLog_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, DriverMessageService_InsertDriverLog_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// DriverServiceServer is the server API for DriverService service.
-// All implementations must embed UnimplementedDriverServiceServer
+// DriverMessageServiceServer is the server API for DriverMessageService service.
+// All implementations must embed UnimplementedDriverMessageServiceServer
 // for forward compatibility
-type DriverServiceServer interface {
+type DriverMessageServiceServer interface {
 	InsertDriverLog(context.Context, *InsertDriverLogRequest) (*InsertDriverLogResponse, error)
-	mustEmbedUnimplementedDriverServiceServer()
+	mustEmbedUnimplementedDriverMessageServiceServer()
 }
 
-// UnimplementedDriverServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedDriverServiceServer struct {
+// UnimplementedDriverMessageServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedDriverMessageServiceServer struct {
 }
 
-func (UnimplementedDriverServiceServer) InsertDriverLog(context.Context, *InsertDriverLogRequest) (*InsertDriverLogResponse, error) {
+func (UnimplementedDriverMessageServiceServer) InsertDriverLog(context.Context, *InsertDriverLogRequest) (*InsertDriverLogResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InsertDriverLog not implemented")
 }
-func (UnimplementedDriverServiceServer) mustEmbedUnimplementedDriverServiceServer() {}
+func (UnimplementedDriverMessageServiceServer) mustEmbedUnimplementedDriverMessageServiceServer() {}
 
-// UnsafeDriverServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to DriverServiceServer will
+// UnsafeDriverMessageServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to DriverMessageServiceServer will
 // result in compilation errors.
-type UnsafeDriverServiceServer interface {
-	mustEmbedUnimplementedDriverServiceServer()
+type UnsafeDriverMessageServiceServer interface {
+	mustEmbedUnimplementedDriverMessageServiceServer()
 }
 
-func RegisterDriverServiceServer(s grpc.ServiceRegistrar, srv DriverServiceServer) {
-	s.RegisterService(&DriverService_ServiceDesc, srv)
+func RegisterDriverMessageServiceServer(s grpc.ServiceRegistrar, srv DriverMessageServiceServer) {
+	s.RegisterService(&DriverMessageService_ServiceDesc, srv)
 }
 
-func _DriverService_InsertDriverLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DriverMessageService_InsertDriverLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InsertDriverLogRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DriverServiceServer).InsertDriverLog(ctx, in)
+		return srv.(DriverMessageServiceServer).InsertDriverLog(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: DriverService_InsertDriverLog_FullMethodName,
+		FullMethod: DriverMessageService_InsertDriverLog_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DriverServiceServer).InsertDriverLog(ctx, req.(*InsertDriverLogRequest))
+		return srv.(DriverMessageServiceServer).InsertDriverLog(ctx, req.(*InsertDriverLogRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// DriverService_ServiceDesc is the grpc.ServiceDesc for DriverService service.
+// DriverMessageService_ServiceDesc is the grpc.ServiceDesc for DriverMessageService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var DriverService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "DriverService",
-	HandlerType: (*DriverServiceServer)(nil),
+var DriverMessageService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "DriverMessageService",
+	HandlerType: (*DriverMessageServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "InsertDriverLog",
-			Handler:    _DriverService_InsertDriverLog_Handler,
+			Handler:    _DriverMessageService_InsertDriverLog_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

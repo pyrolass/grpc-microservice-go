@@ -11,10 +11,10 @@ type DriverHandlerInterface interface {
 }
 
 type DriverHandler struct {
-	gClient types.DriverServiceClient
+	gClient types.DriverMessageServiceClient
 }
 
-func NewDriverHandler(gClient types.DriverServiceClient) DriverHandlerInterface {
+func NewDriverHandler(gClient types.DriverMessageServiceClient) DriverHandlerInterface {
 	return &DriverHandler{
 		gClient: gClient,
 	}

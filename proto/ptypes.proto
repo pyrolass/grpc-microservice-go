@@ -4,7 +4,7 @@ option go_package = "github.com/pyrolass/grpc-microservice-go/tolling/types";
 
 
 
-service DriverService{
+service DriverMessageService{
     rpc InsertDriverLog(InsertDriverLogRequest) returns (InsertDriverLogResponse);
 }
 

@@ -54,7 +54,7 @@ func main() {
 
 	defer conn.Close()
 
-	gClient := types.NewDriverServiceClient(conn)
+	gClient := types.NewDriverMessageServiceClient(conn)
 
 	routes.DriverRoutes(router, gClient)
 

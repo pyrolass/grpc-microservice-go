@@ -48,7 +48,7 @@ func makeGRPCTransport(listenAddr string, p producer.ProducerInterface) error {
 
 	driverHandler := handlers.NewGRPCDriverHandler(p)
 
-	types.RegisterDriverServiceServer(grpcServer, driverHandler)
+	types.RegisterDriverMessageServiceServer(grpcServer, driverHandler)
 
 	return grpcServer.Serve(ln)
 

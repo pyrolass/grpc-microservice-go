@@ -10,7 +10,7 @@ import (
 )
 
 type GRPCDriverHandler struct {
-	types.UnimplementedDriverServiceServer
+	types.UnimplementedDriverMessageServiceServer
 	p producer.ProducerInterface
 }
 
