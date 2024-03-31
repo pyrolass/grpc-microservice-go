@@ -34,8 +34,8 @@ func NewKafkaConsumer(topic string) (*KafkaConsumer, error) {
 	if err != nil {
 		panic(err)
 	}
-
-	defer conn.Close()
+	// TODO close connection
+	// defer conn.Close()
 
 	return &KafkaConsumer{consumer: c, conn: conn}, nil
 }
@@ -70,7 +70,7 @@ func (c *KafkaConsumer) readMessageLoop() {
 
 		messagesBatch = append(messagesBatch, &driverData)
 
-		if len(messagesBatch) == 1 {
+		if len(messagesBatch) == 5 {
 
 			batchRequest := &types.InsertLogListRequest{Logs: messagesBatch}
 
