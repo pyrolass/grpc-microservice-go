@@ -12,8 +12,23 @@ service DriverWriteService{
     rpc InsertDriverLogDB(InsertLogListRequest) returns (InsertDriverLogResponse);
 }
 
+service DriverQueryService{
+    rpc GetDriverLogs(GetDriverLogRequest) returns (None);
+}
 
-message None{}
+message None{
+    
+}
+
+message GetDriverLogRequest{
+    int32 DriverId = 1;
+}
+
+message GetDriverLogResponse{
+    int32 DriverId = 1;
+    float DistanceTravelled = 2;
+
+}
 
 
 message InsertDriverLogRequest{

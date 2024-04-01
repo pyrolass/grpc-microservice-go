@@ -197,3 +197,93 @@ var DriverWriteService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/ptypes.proto",
 }
+
+const (
+	DriverQueryService_GetDriverLogs_FullMethodName = "/DriverQueryService/GetDriverLogs"
+)
+
+// DriverQueryServiceClient is the client API for DriverQueryService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type DriverQueryServiceClient interface {
+	GetDriverLogs(ctx context.Context, in *GetDriverLogRequest, opts ...grpc.CallOption) (*None, error)
+}
+
+type driverQueryServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewDriverQueryServiceClient(cc grpc.ClientConnInterface) DriverQueryServiceClient {
+	return &driverQueryServiceClient{cc}
+}
+
+func (c *driverQueryServiceClient) GetDriverLogs(ctx context.Context, in *GetDriverLogRequest, opts ...grpc.CallOption) (*None, error) {
+	out := new(None)
+	err := c.cc.Invoke(ctx, DriverQueryService_GetDriverLogs_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// DriverQueryServiceServer is the server API for DriverQueryService service.
+// All implementations must embed UnimplementedDriverQueryServiceServer
+// for forward compatibility
+type DriverQueryServiceServer interface {
+	GetDriverLogs(context.Context, *GetDriverLogRequest) (*None, error)
+	mustEmbedUnimplementedDriverQueryServiceServer()
+}
+
+// UnimplementedDriverQueryServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedDriverQueryServiceServer struct {
+}
+
+func (UnimplementedDriverQueryServiceServer) GetDriverLogs(context.Context, *GetDriverLogRequest) (*None, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDriverLogs not implemented")
+}
+func (UnimplementedDriverQueryServiceServer) mustEmbedUnimplementedDriverQueryServiceServer() {}
+
+// UnsafeDriverQueryServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to DriverQueryServiceServer will
+// result in compilation errors.
+type UnsafeDriverQueryServiceServer interface {
+	mustEmbedUnimplementedDriverQueryServiceServer()
+}
+
+func RegisterDriverQueryServiceServer(s grpc.ServiceRegistrar, srv DriverQueryServiceServer) {
+	s.RegisterService(&DriverQueryService_ServiceDesc, srv)
+}
+
+func _DriverQueryService_GetDriverLogs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDriverLogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DriverQueryServiceServer).GetDriverLogs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DriverQueryService_GetDriverLogs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DriverQueryServiceServer).GetDriverLogs(ctx, req.(*GetDriverLogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// DriverQueryService_ServiceDesc is the grpc.ServiceDesc for DriverQueryService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var DriverQueryService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "DriverQueryService",
+	HandlerType: (*DriverQueryServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetDriverLogs",
+			Handler:    _DriverQueryService_GetDriverLogs_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/ptypes.proto",
+}

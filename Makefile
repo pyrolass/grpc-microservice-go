@@ -14,6 +14,10 @@ write:
 	@go build -o bin/write-db-micro ./write-db-micro
 	@./bin/write-db-micro
 
+dist:
+	@go build -o bin/distance-micro ./distance-micro
+	@./bin/distance-micro
+
 
 spam:
 	@go build -o bin/spam ./spam
