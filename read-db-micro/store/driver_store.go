@@ -2,7 +2,6 @@ package store
 
 import (
 	"context"
-	"fmt"
 
 	types "github.com/pyrolass/grpc-microservice-go/proto"
 	"github.com/pyrolass/grpc-microservice-go/read-db-micro/common"
@@ -66,8 +65,6 @@ func (d *DriverStore) GetDriverLog(ctx context.Context, id int) (*types.GetDrive
 		DistanceTravelled: float32(distance),
 		DataFound:         true,
 	}
-
-	fmt.Println(distanceDriverTook)
 
 	return distanceDriverTook, nil
 }
