@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/pyrolass/grpc-microservice-go/distance-micro/clients"
 	types "github.com/pyrolass/grpc-microservice-go/proto"
@@ -20,7 +19,7 @@ func NewDistanceGRPCDriverHandler(readClient *clients.ReadGRPCClient) *DistanceG
 }
 
 func (h *DistanceGRPCDriverHandler) GetDriverLogs(ctx context.Context, req *types.GetDriverLogRequest) (*types.GetDriverLogResponse, error) {
-	fmt.Println("test")
+
 	res, err := h.readClient.Client.GetDriverLogsDB(ctx, req)
 
 	if err != nil {

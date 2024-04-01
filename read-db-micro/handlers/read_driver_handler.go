@@ -2,21 +2,28 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 
 	types "github.com/pyrolass/grpc-microservice-go/proto"
+	"github.com/pyrolass/grpc-microservice-go/read-db-micro/store"
 )
 
 type ReadGRPCDriverHandler struct {
 	types.UnimplementedDriverReadServiceServer
+	store store.DriverStoreInterface
 }
 
-func NewReadGRPCDriverHandler() *ReadGRPCDriverHandler {
-	return &ReadGRPCDriverHandler{}
+func NewReadGRPCDriverHandler(store store.DriverStoreInterface) *ReadGRPCDriverHandler {
+	return &ReadGRPCDriverHandler{
+		store: store,
+	}
 }
 
 func (rs *ReadGRPCDriverHandler) GetDriverLogsDB(ctx context.Context, req *types.GetDriverLogRequest) (*types.GetDriverLogResponse, error) {
+	data, err := rs.store.GetDriverLog(ctx, int(req.DriverId))
 
-	fmt.Println("wawa wea")
-	return nil, nil
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }

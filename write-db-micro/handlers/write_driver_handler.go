@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"time"
 
 	types "github.com/pyrolass/grpc-microservice-go/proto"
 	"github.com/pyrolass/grpc-microservice-go/write-db-micro/entities"
@@ -28,7 +29,8 @@ func (d *WriteGRPCDriverHandler) InsertDriverLogDB(ctx context.Context, req *typ
 
 	for _, log := range req.Logs {
 		logs = append(logs, entities.DriverLog{
-			DriverID: int(log.DriverId),
+			DriverID:  int(log.DriverId),
+			CreatedAt: time.Now(),
 			Log: entities.Log{
 				Lat: log.Lat,
 				Lon: log.Lon,

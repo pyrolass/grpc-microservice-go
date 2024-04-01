@@ -1,8 +1,11 @@
 package entities
 
+import "time"
+
 type DriverLog struct {
-	DriverID int `bson:"driver_id"`
-	Log      Log `bson:"log"`
+	DriverID  int       `bson:"driver_id"`
+	Log       Log       `bson:"log"`
+	CreatedAt time.Time `bson:"created_at"`
 }
 
 type Log struct {

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/pyrolass/grpc-microservice-go/gateway/entities"
@@ -56,17 +57,28 @@ func (d *DriverHandler) GetDriverLogs(c *fiber.Ctx) error {
 
 	driverId := c.Params("id")
 
-	fmt.Println(driverId)
+	parsedId, err := strconv.Atoi(driverId)
+
+	if err != nil {
+		// Handle the error if the conversion fails
+		fmt.Println("Error converting driver ID to integer:", err)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid driver ID format",
+		})
+	}
 
 	res, err := d.dc.GetDriverLogs(c.Context(), &types.GetDriverLogRequest{
-		DriverId: fiber.DefaultReadBufferSize,
+		DriverId: int32(parsedId),
 	})
 
 	if err != nil {
 		return err
 	}
 
-	return c.JSON(map[string]any{
-		"message": res,
-	})
+	var driverLog = entities.DriverLog{
+		DriverId: int(res.DriverId),
+		Distance: float64(res.DistanceTravelled),
+	}
+
+	return c.JSON(driverLog)
 }
