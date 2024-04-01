@@ -33,6 +33,7 @@ message GetDriverLogRequest{
 message GetDriverLogResponse{
     int32 DriverId = 1;
     float DistanceTravelled = 2;
+    bool DataFound = 3;
 
 }
 

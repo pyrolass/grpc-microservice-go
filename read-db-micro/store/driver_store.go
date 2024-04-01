@@ -3,7 +3,6 @@ package store
 import (
 	"context"
 	"fmt"
-	"time"
 
 	types "github.com/pyrolass/grpc-microservice-go/proto"
 	"github.com/pyrolass/grpc-microservice-go/read-db-micro/common"
@@ -34,7 +33,7 @@ func (d *DriverStore) GetDriverLog(ctx context.Context, id int) (*types.GetDrive
 
 	var driverLogs []entities.DriverLog
 
-	cur, err := d.coll.Find(ctx, map[string]any{"driver_id": id, "created_at": map[string]any{"$gte": time.Now().Add(-time.Hour)}})
+	cur, err := d.coll.Find(ctx, map[string]any{"driver_id": id})
 
 	if err != nil {
 		return nil, err
@@ -42,6 +41,12 @@ func (d *DriverStore) GetDriverLog(ctx context.Context, id int) (*types.GetDrive
 
 	if err := cur.All(ctx, &driverLogs); err != nil {
 		return nil, err
+	}
+
+	if len(driverLogs) == 0 {
+		return &types.GetDriverLogResponse{
+			DataFound: false,
+		}, nil
 	}
 
 	var distance float64
@@ -59,6 +64,7 @@ func (d *DriverStore) GetDriverLog(ctx context.Context, id int) (*types.GetDrive
 	var distanceDriverTook *types.GetDriverLogResponse = &types.GetDriverLogResponse{
 		DriverId:          int32(id),
 		DistanceTravelled: float32(distance),
+		DataFound:         true,
 	}
 
 	fmt.Println(distanceDriverTook)

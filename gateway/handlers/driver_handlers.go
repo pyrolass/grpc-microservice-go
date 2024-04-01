@@ -75,6 +75,10 @@ func (d *DriverHandler) GetDriverLogs(c *fiber.Ctx) error {
 		return err
 	}
 
+	if !res.DataFound {
+		return c.JSON(fiber.Map{})
+	}
+
 	var driverLog = entities.DriverLog{
 		DriverId: int(res.DriverId),
 		Distance: float64(res.DistanceTravelled),
