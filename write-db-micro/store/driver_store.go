@@ -19,7 +19,7 @@ type DriverStore struct {
 func NewDriverStore(
 	client *mongo.Client,
 	coll *mongo.Collection,
-) *DriverStore {
+) DriverStoreInterface {
 	return &DriverStore{
 		client: client,
 		coll:   coll,
