@@ -13,7 +13,7 @@ service DriverWriteService{
 }
 
 service DriverQueryService{
-    rpc GetDriverLogs(GetDriverLogRequest) returns (None);
+    rpc GetDriverLogs(GetDriverLogRequest) returns (GetDriverLogResponse);
 }
 
 message None{

@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/pyrolass/grpc-microservice-go/gateway/entities"
 	types "github.com/pyrolass/grpc-microservice-go/proto"
@@ -8,15 +10,18 @@ import (
 
 type DriverHandlerInterface interface {
 	InsertDriverLog(c *fiber.Ctx) error
+	GetDriverLogs(c *fiber.Ctx) error
 }
 
 type DriverHandler struct {
-	gClient types.DriverMessageServiceClient
+	pc types.DriverMessageServiceClient
+	dc types.DriverQueryServiceClient
 }
 
-func NewDriverHandler(gClient types.DriverMessageServiceClient) DriverHandlerInterface {
+func NewDriverHandler(pc types.DriverMessageServiceClient, dc types.DriverQueryServiceClient) DriverHandlerInterface {
 	return &DriverHandler{
-		gClient: gClient,
+		pc: pc,
+		dc: dc,
 	}
 }
 
@@ -26,7 +31,7 @@ func (d *DriverHandler) InsertDriverLog(c *fiber.Ctx) error {
 		return err
 	}
 
-	res, err := d.gClient.InsertDriverLog(c.Context(), &types.InsertDriverLogRequest{
+	res, err := d.pc.InsertDriverLog(c.Context(), &types.InsertDriverLogRequest{
 		DriverId: int32(driver.DriverId),
 		Lat:      driver.Lat,
 		Lon:      driver.Lon,
@@ -44,5 +49,24 @@ func (d *DriverHandler) InsertDriverLog(c *fiber.Ctx) error {
 
 	return c.JSON(map[string]string{
 		"message": "destination received",
+	})
+}
+
+func (d *DriverHandler) GetDriverLogs(c *fiber.Ctx) error {
+
+	driverId := c.Params("id")
+
+	fmt.Println(driverId)
+
+	res, err := d.dc.GetDriverLogs(c.Context(), &types.GetDriverLogRequest{
+		DriverId: fiber.DefaultReadBufferSize,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(map[string]any{
+		"message": res,
 	})
 }

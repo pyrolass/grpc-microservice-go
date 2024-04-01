@@ -206,7 +206,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DriverQueryServiceClient interface {
-	GetDriverLogs(ctx context.Context, in *GetDriverLogRequest, opts ...grpc.CallOption) (*None, error)
+	GetDriverLogs(ctx context.Context, in *GetDriverLogRequest, opts ...grpc.CallOption) (*GetDriverLogResponse, error)
 }
 
 type driverQueryServiceClient struct {
@@ -217,8 +217,8 @@ func NewDriverQueryServiceClient(cc grpc.ClientConnInterface) DriverQueryService
 	return &driverQueryServiceClient{cc}
 }
 
-func (c *driverQueryServiceClient) GetDriverLogs(ctx context.Context, in *GetDriverLogRequest, opts ...grpc.CallOption) (*None, error) {
-	out := new(None)
+func (c *driverQueryServiceClient) GetDriverLogs(ctx context.Context, in *GetDriverLogRequest, opts ...grpc.CallOption) (*GetDriverLogResponse, error) {
+	out := new(GetDriverLogResponse)
 	err := c.cc.Invoke(ctx, DriverQueryService_GetDriverLogs_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -230,7 +230,7 @@ func (c *driverQueryServiceClient) GetDriverLogs(ctx context.Context, in *GetDri
 // All implementations must embed UnimplementedDriverQueryServiceServer
 // for forward compatibility
 type DriverQueryServiceServer interface {
-	GetDriverLogs(context.Context, *GetDriverLogRequest) (*None, error)
+	GetDriverLogs(context.Context, *GetDriverLogRequest) (*GetDriverLogResponse, error)
 	mustEmbedUnimplementedDriverQueryServiceServer()
 }
 
@@ -238,7 +238,7 @@ type DriverQueryServiceServer interface {
 type UnimplementedDriverQueryServiceServer struct {
 }
 
-func (UnimplementedDriverQueryServiceServer) GetDriverLogs(context.Context, *GetDriverLogRequest) (*None, error) {
+func (UnimplementedDriverQueryServiceServer) GetDriverLogs(context.Context, *GetDriverLogRequest) (*GetDriverLogResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDriverLogs not implemented")
 }
 func (UnimplementedDriverQueryServiceServer) mustEmbedUnimplementedDriverQueryServiceServer() {}

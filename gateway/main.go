@@ -4,11 +4,10 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/pyrolass/grpc-microservice-go/gateway/clients"
 	"github.com/pyrolass/grpc-microservice-go/gateway/common"
 	"github.com/pyrolass/grpc-microservice-go/gateway/middleware"
 	"github.com/pyrolass/grpc-microservice-go/gateway/routes"
-	types "github.com/pyrolass/grpc-microservice-go/proto"
-	"google.golang.org/grpc"
 )
 
 var config = fiber.Config{
@@ -45,18 +44,15 @@ func main() {
 		},
 	)
 
-	// driver routes grpc
-	conn, err := grpc.Dial("localhost:3001", grpc.WithInsecure())
+	// init the connection
+	prodClient := clients.NewProducerGRPCClient()
+	distClient := clients.NewDistanceGRPCClient()
 
-	if err != nil {
-		panic(err)
-	}
+	// close the connection
+	defer prodClient.CloseConnection()
+	defer distClient.CloseConnection()
 
-	defer conn.Close()
-
-	gClient := types.NewDriverMessageServiceClient(conn)
-
-	routes.DriverRoutes(router, gClient)
+	routes.DriverRoutes(router, prodClient.Client, distClient.Client)
 
 	log.Fatal(app.Listen(":3000"))
 }

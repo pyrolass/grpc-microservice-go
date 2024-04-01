@@ -6,9 +6,11 @@ import (
 	types "github.com/pyrolass/grpc-microservice-go/proto"
 )
 
-func DriverRoutes(router fiber.Router, gClient types.DriverMessageServiceClient) {
+func DriverRoutes(router fiber.Router, pc types.DriverMessageServiceClient, dc types.DriverQueryServiceClient) {
 
-	driverHandle := handlers.NewDriverHandler(gClient)
+	driverHandle := handlers.NewDriverHandler(pc, dc)
+
 	router.Post("/drivers", driverHandle.InsertDriverLog)
+	router.Get("/drivers/:id", driverHandle.GetDriverLogs)
 
 }
