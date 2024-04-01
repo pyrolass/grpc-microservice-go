@@ -43,9 +43,8 @@ This project includes a `docker-compose` file for easy setup of the microservice
 
 The following endpoint is available on the gateway for drivers to send their data:
 
+```
 - http://localhost:3000/api/v1/drivers
 - http://localhost:3000/api/v1/drivers/1
-
-```
 
 ```
