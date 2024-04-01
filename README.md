@@ -45,6 +45,6 @@ The following endpoint is available on the gateway for drivers to send their dat
 
 ```
 - http://localhost:3000/api/v1/drivers
-- http://localhost:3000/api/v1/drivers/1
 
+- http://localhost:3000/api/v1/drivers/1
 ```
