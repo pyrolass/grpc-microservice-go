@@ -12,9 +12,15 @@ service DriverWriteService{
     rpc InsertDriverLogDB(InsertLogListRequest) returns (InsertDriverLogResponse);
 }
 
+service DriverReadService{
+    rpc GetDriverLogsDB(GetDriverLogRequest) returns (GetDriverLogResponse);
+}
+
 service DriverQueryService{
     rpc GetDriverLogs(GetDriverLogRequest) returns (GetDriverLogResponse);
 }
+
+
 
 message None{
     

@@ -14,6 +14,10 @@ write:
 	@go build -o bin/write-db-micro ./write-db-micro
 	@./bin/write-db-micro
 
+read:
+	@go build -o bin/read-db-micro ./read-db-micro
+	@./bin/read-db-micro
+
 dist:
 	@go build -o bin/distance-micro ./distance-micro
 	@./bin/distance-micro

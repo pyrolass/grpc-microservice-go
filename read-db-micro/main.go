@@ -2,17 +2,17 @@ package main
 
 import (
 	"flag"
+
 	"net"
 
-	"github.com/pyrolass/grpc-microservice-go/distance-micro/clients"
-	"github.com/pyrolass/grpc-microservice-go/distance-micro/handlers"
 	types "github.com/pyrolass/grpc-microservice-go/proto"
+	"github.com/pyrolass/grpc-microservice-go/read-db-micro/handlers"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	grpcListenAddr := flag.String("grpc-addr", ":3004", "server listen address")
+	grpcListenAddr := flag.String("grpc-addr", ":3005", "server listen address")
 
 	err := makeGRPCTransport(*grpcListenAddr)
 
@@ -34,17 +34,12 @@ func makeGRPCTransport(listenAddr string) error {
 	}
 
 	defer ln.Close()
-	// make grpc server
-
-	readClient := clients.NewReadGRPCClient()
-
-	defer readClient.CloseConnection()
 
 	grpcServer := grpc.NewServer([]grpc.ServerOption{}...)
 
-	driverHandler := handlers.NewDistanceGRPCDriverHandler(readClient)
+	driverHandler := handlers.NewReadGRPCDriverHandler()
 
-	types.RegisterDriverQueryServiceServer(grpcServer, driverHandler)
+	types.RegisterDriverReadServiceServer(grpcServer, driverHandler)
 
 	return grpcServer.Serve(ln)
 

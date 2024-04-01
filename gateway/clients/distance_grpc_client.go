@@ -18,8 +18,6 @@ func NewDistanceGRPCClient() *DistanceGRPCClient {
 		panic(err)
 	}
 
-	defer conn.Close()
-
 	client := types.NewDriverQueryServiceClient(conn)
 
 	return &DistanceGRPCClient{
